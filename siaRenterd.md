@@ -1,11 +1,13 @@
-## Building a File Migration Web App from AWS Bucket to renterd using Next.js and TypeScript
+## Building a File Migration Web App from AWS Bucket to Sia renterd using Next.js and TypeScript
 
-#
 
 ![Screenhot of Miuve Web App!](Screenshot.png "Miuve Screenshot")
 
 ## Introduction
-In this tutorial, we will explore how to build a web application using Next.js and TypeScript that can migrate files from an AWS bucket to renterd. We will provide a brief introduction to Sia and renterd, followed by step-by-step instructions on building the web app. By the end of this tutorial, you will have a solid understanding of Sia, renterd, and how to migrate files from an AWS bucket to renterd using a web app built with Next.js and TypeScript. We can upload, migrate and delete any file but to keep this tutorial short, we can only preview image files on the browser.
+In this tutorial, we will explore how to build a web application using Next.js and TypeScript that can migrate files from an AWS bucket to renterd. We will provide a brief introduction to Sia and renterd, followed by step-by-step instructions on building the web app. By the end of this tutorial, you will have a solid understanding of Sia and Sia renterd, and how to migrate files from an AWS bucket to renterd using a web app built with Next.js and TypeScript. We can upload, migrate and delete any file but to keep this tutorial short, we can only preview image files on the browser.
+
+## Demo
+We are going to be building something like this [SiaMiuve](https://miuve-86d636.spheron.app/) but won't be going into the entire user interface and user experience and that's because we're trying to keep this tutorial as short as possible. I recommend you go through the app before continuing the tutorial, it's totally worth it!
 
 
 ## What is Sia?
@@ -200,11 +202,11 @@ export const REGISTER_ENDPOINT = `https://renterd-mock.sia.tools/api/test/regist
 
 ```
 
-- In your Next.js project, create a new file named utils/siaUtil.ts an d add the following code to you constants.ts file:
+- In your Next.js project, create a new file named utils/siaUtil.ts and add the following code to your constants.ts file:
 
-## In your Next.js project, create a new file named utils/siaUtils.ts add the following code to you siaUtils file:
+## In your Next.js project, create a new file named utils/siaUtils.ts add the following code to your siaUtils file:
 
-Handles user regiration because we are going to need to use the token to make every other request to renterd API endpoints for for now we are going to store it in our local storage.
+Handles user registration because we are going to need to use the token to make every other request to renterd API endpoints for now we are going to store it in our local storage.
 
 ```ts 
 import { API_ENDPOINT, REGISTER_ENDPOINT } from "../constants";
@@ -229,7 +231,7 @@ export const logOut = () => {
 };
 ```
 
-When uploading file to renderd, if you upload to a base directory like ```/documents``` the file gets uploaded succefully, how ever, if you upload another file to that same directory, it replaces the one that was previously there but we'd like to upload multiple files so we can still fetch all of them instead of the previous one getting replaced, to do that we are going to create a new path name for every file we are uploading and because we are not 100% sure of that all our files have a unique name, we are going to generate a random path name for each file, there are other ways to do this to ensure uniquesness of file name but for the purpose of this tutorial, we are goiing to use the inbuilt JavaScript Maths.random() method.
+When uploading the file to renderd, if you upload to a base directory like ```/documents``` the file gets uploaded successfully, however, if you upload another file to that same directory, it replaces the one that was previously there but we'd like to upload multiple files so we can still fetch all of them instead of the previous one getting replaced, to do that we are going to create a new path name for every file we are uploading and because we are not 100% sure of that all our files have a unique name, we are going to generate a random path name for each file, there are other ways to do this to ensure uniqueness of file name but for the purpose of this tutorial, we are going to use the inbuilt JavaScript Maths.random() method.
 ```ts
 export const uploadToRenterd = async (file: File) => {
   console.log("Uploading...");
@@ -255,7 +257,7 @@ export const uploadToRenterd = async (file: File) => {
 };
 ```
 
-Because we need to download all the files we have uploaded so that we can probably render them on the creen or for any other purpose, we need to make a ```GET``` request to our base directory which in our case is ```/documents```, this will return an array of object containing name and sizes of the files we've uploaded previously, this is cool but one thing is missing, we want the file contents too, so we can preview them like we need to do in our demo app.
+Because we need to download all the files we have uploaded so that we can probably render them on the screen or for any other purpose, we need to make a ```GET``` request to our base directory which in our case is ```/documents```, this will return an array of an object containing name and sizes of the files we've uploaded previously, this is cool but one thing is missing, we want the file contents too, so we can preview them like we need to do in our demo app.
 ```ts
 export const downloadFromRentred = async () => {
   console.log("Downloading file");
@@ -386,7 +388,7 @@ export default function Migrate() {
 
 ```
 
-Update your ```next.config.ts``` file with the below configuration to be albe to view images from our s3 bucket:
+Update your ```next.config.ts``` file with the below configuration to be able to view images from our s3 bucket:
 
 ```ts
 /** @type {import('next').NextConfig} */
@@ -403,7 +405,7 @@ const nextConfig = {
 module.exports = nextConfig;
 ```
 
-Next we need to do is to create a create another utils file and write the functions that's going to help us migrate any file from te files we just fetched from s3 to renterd, to do that, create a new file with the name migrate.ts inside our utils folder and add the following codes:
+Next, we need to do is to create another utils file and write the functions that are going to help us migrate any file from the files we just fetched from s3 to renterd, to do that, create a new file with the name migrate.ts inside our utils folder and add the following codes:
 
 ```ts
 import { downloadFromRentred, uploadToRenterd } from "./siaUtils";
@@ -436,11 +438,11 @@ export const handleMigration = (file: any) => {
 ```
 
 
-In the above code example, we have a function name `handleMigration` which handles the migration of file from s3 to renterd, what we need to migrate is a file and not a file url but what we are getting from s3 bucket is file url so to fix that we introduced another function which helps us create a file object from the file url, then we also have another function that takes in file url and then returns filename which we then pass in as the name of the new file object. Summary of what we did is that:
-* we got file name
-* create new file boject from file url
-* upload the file to sia renterd
-* then download our sia renterd files so we can see the new file we just migrated from our s3 bucket.
+In the above code example, we have a function name `handleMigration` which handles the migration of files from s3 to renterd, what we need to migrate is a file and not a file url but what we are getting from s3 bucket is a file URL so to fix that we introduced another function which helps us create a file object from the file url, then we also have another function that takes in file url and then returns filename which we then pass in as the name of the new file object. A summary of what we did is that:
+* We got the file name
+* Create a new file project from file URL
+* Upload the file to sia renterd
+* Then download our sia renterd files so we can see the new file we just migrated from our s3 bucket.
 
 
 Now we need to go back to our `page.tsx` and update our handleMigration function: 
@@ -495,7 +497,7 @@ Start the Next.js development server by running the following command in your pr
    ```shell
    npm run dev
    ```
-If you click on the migrate button you'll get a `401` error and that's because we re trying to upload to renterd withpout our auth token, we've written the function but we've not called it so lets fix that, we need to update our page.tsx to enable us resiter:
+If you click on the migrate button you'll get a `401` error and that's because we're trying to upload to renterd without our auth token, we've written the function but we've not called it so let's fix that, we need to update our page.tsx to enable us resiter:
 
 ```html
 <button onClick={() => register()}>Register</button>
@@ -581,9 +583,9 @@ export default function Migrate() {
 
 # Summary
 
-Now you have your project up and running, here are a few resources to help you learn more about Sia and dcecentralized storage systems and also join our vibrant community!
+Now you have your project up and running, here are a few resources to help you learn more about Sia and decentralized storage systems and also join our vibrant community!
 
-You can find the codebase link below and if you have any question please don't hesitate to reach out to us on Discord!
+You can find the codebase link below and if you have any questions please don't hesitate to reach out to us on Discord!
 
 
 Demo Project link: https://miuve-86d636.spheron.app/
@@ -594,20 +596,20 @@ Sia Documentation: https://docs.sia.tech/get-started-with-sia/sia101
 
 Sia Community: https://discord.gg/sia
 
-Project repo: https://github.com/
+Project repo: https://github.com/joshuanwankwo/sia_file_migration_utility
 
 
 
 
 
 # Distribution Strategy
-For the distrubution strategy, we can adopt a couple of options or even go with the most effective one but let's figure out who are target audience are. We can say that our target audience are Software Engineers, Blockchain and cryptocurrency communities, Startups and small businesses that are looking for cost effective cloud storage solutions and even Data sensitive industries such as Health care, Finance and legal sector. To reach these people, we can adopt a few methods:
+For the distribution strategy, we can adopt a couple of options or even go with the most effective one but let's figure out who our target audience is. We can say that our target audience is Software Engineers, Blockchain and cryptocurrency communities, Startups, and small businesses that are looking for cost-effective cloud storage solutions, and even Data sensitive industries such as Health care, Finance, and the legal sector. To reach these people, we can adopt a few methods:
 
-- **Blog Post:** Publishing the tutorial as a blog post will help us reach a set of developers who want to get an idea of how sia works and how to work with, and integrate with other platforms, developers who need to see working code examples to give them idea of how to work with Sia, and blog post has little to no maintainace(Updating) required which in turn saves time and resources.
+- **Blog Post:** Publishing the tutorial as a blog post will help us reach a set of developers who want to get an idea of how sia works and how to work with and integrate with other platforms, developers who need to see working code examples to give them an idea of how to work with Sia, and blog post has little to no maintenance(Updating) required which in turn saves time and resources.
 
-- **Tutorial Video:** Making and publishing video tutorial will help us achieve the same as blog but now reaching people who are visual learners.
+- **Tutorial Video:** Making and publishing a video tutorial will help us achieve the same as a blog but now reach people who are visual learners.
 
-- **Developer Confferences/Hackathon:** This method to me is the most effective, especially for promoting Sia platform and engaging with developers in real time, this enhances networking and relationship building because face-to-face interactions allow for personal connections and relationship building, which can lead to stronger collaborations, partnerships, and future opportunities. Meeting developers in person fosters trust and facilitates deeper conversations compared to virtual interactions and also help us get feedback in real time
+- **Developer Conferences/Hackathon:** This method to me is the most effective, especially for promoting Sia platform and engaging with developers in real-time, this enhances networking and relationship building because face-to-face interactions allow for personal connections and relationship building, which can lead to stronger collaborations, partnerships, and future opportunities. Meeting developers in person fosters trust and facilitates deeper conversations compared to virtual interactions and also helps us get feedback in real-time
 
 
-1. **Include in Documentation:** Including the tutorial as part of getting start in Sia renterd documentation will help us reach the curious ones who wants to build and are looking for code on how to get started.
+1. **Include in Documentation:** Including the tutorial as part of getting started in Sia renterd documentation will help us reach the curious ones who want to build and are looking for code on how to get started.
