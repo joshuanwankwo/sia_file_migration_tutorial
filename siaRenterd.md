@@ -29,7 +29,7 @@ Renterd is the client software of the Sia network that allows users to interact 
 - Node.js and npm installed on your machine.
 - An AWS account to access and migrate files from an AWS bucket.
 - Basic knowledge of Next.js and TypeScript.
-- Sia and renterd set up with a reachable API address and API key.
+- Renterd reachable API address.
 - Text editor or IDE for coding.
 - Command Line Interface (CLI) for running commands and scripts.
 - Upload some image files to your AWS bucket.
@@ -72,7 +72,7 @@ Before accessing your AWS bucket, you need to set up AWS credentials. These cred
 
 4. Provide a name for the user and enable programmatic access.
 
-5. Attach appropriate permissions to the user. For this tutorial, you will need "AmazonS3ReadOnlyAccess" permission for the user.
+5. Attach appropriate permissions to the user. For this tutorial, you will need "AmazonS3FullAccess" permission for the user.
 
 6. Complete the user creation process and make note of the Access Key ID and Secret Access Key. 
 
