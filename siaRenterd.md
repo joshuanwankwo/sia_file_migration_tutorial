@@ -1,5 +1,7 @@
-## Building a File Migration Web App from AWS Bucket to Sia renterd using Next.js and TypeScript
+## Migrate data from S3 bucket to Sia renterd
+#### Harnessing renterd, TypeScript and Next.js for Effortless File Migration from AWS Bucket to Sia.
 
+#
 
 ![Screenhot of Miuve Web App!](Screenshot.png "Miuve Screenshot")
 
