@@ -1,5 +1,5 @@
-## Unlocking Seamless Data Migration
-### Harnessing renterd, TypeScript and Next.js for Effortless File Migration from AWS Bucket to Sia Network.
+## Migrate data from S3 bucket to Sia renterd
+#### Harnessing renterd, TypeScript and Next.js for Effortless File Migration from AWS Bucket to Sia.
 
 #
 
